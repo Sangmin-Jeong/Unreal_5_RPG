@@ -36,13 +36,17 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	[this](const FGameplayTagContainer& AssetTags){
 		for (const FGameplayTag& Tag : AssetTags)
 		{
-			const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
-			GEngine->AddOnScreenDebugMessage(-1, 8, FColor::Blue, Msg);
+			FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+			// "A.1".MatchesTag("A") will return True, "A".MatchesTag("A.1") will return False
+			if(Tag.MatchesTag(MessageTag))
+			{
+				//If want to call a member function in Lambda, have to capture the class to [] that has the function
+				const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 
-			/*
-			 * If want to call a member function in Lambda, have to capture the class to [] that has the function
-			 */
-			FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+				MessageWidgetRowDelegate.Broadcast(*Row);
+			}
+
+			
 		}
 			
 	});
