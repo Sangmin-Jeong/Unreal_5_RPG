@@ -52,7 +52,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// Good For clamping values
+	// Good For clamping values, but doesn't set actual values directly
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	// Good For Getting Information of Effect After all, Target and Source
